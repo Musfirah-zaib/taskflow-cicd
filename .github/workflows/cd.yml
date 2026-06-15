@@ -1,0 +1,24 @@
+name: CD – Deploy to Render
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: development
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Deploy to Render
+        run: |
+          curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+
+      - name: Deployment Confirmation
+        run: |
+          echo "✅ Deployment triggered at $(date '+%Y-%m-%d %H:%M:%S UTC')"
+          echo "🌐 TaskFlow is being deployed to Render..."
