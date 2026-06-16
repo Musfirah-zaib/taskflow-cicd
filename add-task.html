@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TaskFlow – Add Task</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* Add Task page – scoped styles (complements shared style.css) */
+    .form-card {
+      background: #fff;
+      border-radius: 10px;
+      padding: 30px 35px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+      margin-top: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: #333;
+      font-size: 0.95rem;
+    }
+
+    .form-group input[type="text"],
+    .form-group input[type="date"],
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1.5px solid #ddd;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      color: #333;
+      background: #fafafa;
+      box-sizing: border-box;
+      transition: border-color 0.2s;
+      font-family: inherit;
+    }
+
+    .form-group input[type="text"]:focus,
+    .form-group input[type="date"]:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: #4f8ef7;
+      background: #fff;
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    .priority-group {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-top: 4px;
+    }
+
+    .priority-option {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      cursor: pointer;
+    }
+
+    .priority-option input[type="radio"] {
+      accent-color: #4f8ef7;
+      width: 17px;
+      height: 17px;
+      cursor: pointer;
+    }
+
+    .priority-label {
+      font-size: 0.93rem;
+      font-weight: 500;
+      padding: 3px 12px;
+      border-radius: 12px;
+    }
+
+    .priority-label.high   { background: #fff0f0; color: #d32f2f; border: 1px solid #f5c6c6; }
+    .priority-label.medium { background: #fff8e1; color: #e65100; border: 1px solid #ffe0b2; }
+    .priority-label.low    { background: #f0fff4; color: #2e7d32; border: 1px solid #c8e6c9; }
+
+    .form-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+
+    .success-msg {
+      display: none;
+      background: #f0fff4;
+      border: 1.5px solid #c8e6c9;
+      color: #2e7d32;
+      padding: 12px 18px;
+      border-radius: 8px;
+      margin-top: 18px;
+      font-weight: 500;
+    }
+
+    .required-note {
+      font-size: 0.82rem;
+      color: #888;
+      margin-bottom: 18px;
+    }
+
+    .field-hint {
+      font-size: 0.8rem;
+      color: #999;
+      margin-top: 4px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>📋 TaskFlow</h1>
+    <nav>
+      <a href="index.html">Dashboard</a>
+      <a href="add-task.html" class="active">Add Task</a>
+      <a href="task-list.html">Task List</a>
+      <a href="task-detail.html">Task Detail</a>
+      <a href="about.html">About</a>
+    </nav>
+  </header>
+
+  <div class="container">
+
+    <div class="card">
+      <h2>➕ Add a New Task</h2>
+      <p>Fill in the form below to create and track a new task in TaskFlow.</p>
+    </div>
+
+    <div class="form-card">
+      <p class="required-note">Fields marked with <span style="color:#d32f2f;">*</span> are required.</p>
+
+      <form id="addTaskForm" onsubmit="handleSubmit(event)" novalidate>
+
+        <!-- Task Title -->
+        <div class="form-group">
+          <label for="taskTitle">Task Title <span style="color:#d32f2f;">*</span></label>
+          <input
+            type="text"
+            id="taskTitle"
+            name="taskTitle"
+            placeholder="e.g. Set up CI/CD pipeline"
+            maxlength="120"
+            required
+          />
+          <p class="field-hint">Keep it short and descriptive (max 120 characters).</p>
+        </div>
+
+        <!-- Description -->
+        <div class="form-group">
+          <label for="taskDescription">Description <span style="color:#d32f2f;">*</span></label>
+          <textarea
+            id="taskDescription"
+            name="taskDescription"
+            placeholder="Describe what needs to be done, any relevant context or acceptance criteria..."
+            required
+          ></textarea>
+        </div>
+
+        <!-- Due Date -->
+        <div class="form-group">
+          <label for="dueDate">Due Date <span style="color:#d32f2f;">*</span></label>
+          <input
+            type="date"
+            id="dueDate"
+            name="dueDate"
+            required
+          />
+        </div>
+
+        <!-- Priority -->
+        <div class="form-group">
+          <label>Priority <span style="color:#d32f2f;">*</span></label>
+          <div class="priority-group">
+            <label class="priority-option">
+              <input type="radio" name="priority" value="High" required />
+              <span class="priority-label high">🔴 High</span>
+            </label>
+            <label class="priority-option">
+              <input type="radio" name="priority" value="Medium" />
+              <span class="priority-label medium">🟠 Medium</span>
+            </label>
+            <label class="priority-option">
+              <input type="radio" name="priority" value="Low" />
+              <span class="priority-label low">🟢 Low</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">✅ Add Task</button>
+          <button type="reset"  class="btn btn-success" onclick="clearMsg()">🔄 Reset Form</button>
+          <a href="task-list.html" class="btn" style="background:#6c757d; color:#fff; text-decoration:none;">📋 View All Tasks</a>
+        </div>
+
+      </form>
+
+      <!-- Success message -->
+      <div class="success-msg" id="successMsg">
+        🎉 Task added successfully! <a href="task-list.html">View your tasks →</a>
+      </div>
+    </div>
+
+  </div>
+
+  <footer>TaskFlow &copy; 2026 – DevOps Assignment 04</footer>
+
+  <script>
+    // Set the minimum date to today so past dates can't be picked
+    document.getElementById('dueDate').min = new Date().toISOString().split('T')[0];
+
+    function handleSubmit(e) {
+      e.preventDefault();
+      const title       = document.getElementById('taskTitle').value.trim();
+      const description = document.getElementById('taskDescription').value.trim();
+      const dueDate     = document.getElementById('dueDate').value;
+      const priority    = document.querySelector('input[name="priority"]:checked');
+
+      if (!title || !description || !dueDate || !priority) {
+        alert('Please fill in all required fields before submitting.');
+        return;
+      }
+
+      // Show success feedback
+      document.getElementById('successMsg').style.display = 'block';
+      document.getElementById('addTaskForm').reset();
+      window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    }
+
+    function clearMsg() {
+      document.getElementById('successMsg').style.display = 'none';
+    }
+  </script>
+
+</body>
+</html>
